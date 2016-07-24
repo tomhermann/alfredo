@@ -5,9 +5,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action1;
+import rx.observers.Observers;
+import rx.observers.Subscribers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+
+        Observable
+                .just("Making sure it works")
+                .subscribe(s -> Log.i(MainActivity.class.getSimpleName(), s));
     }
 
     @Override
