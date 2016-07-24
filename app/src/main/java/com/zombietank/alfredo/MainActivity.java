@@ -28,10 +28,6 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
-
-        Observable
-                .just("Making sure it works")
-                .subscribe(s -> Log.i(MainActivity.class.getSimpleName(), s));
     }
 
     @Override
