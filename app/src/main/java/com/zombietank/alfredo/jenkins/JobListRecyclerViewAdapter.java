@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zombietank.alfredo.R;
+import com.zombietank.alfredo.jenkins.domain.Job;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class JobListRecyclerViewAdapter extends RecyclerView.Adapter<JobListRecy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.job = values.get(position);
         holder.firstLine.setText(holder.job.getName());
-        holder.secondLine.setText(holder.job.getStatus());
+        holder.secondLine.setText(holder.job.getDescription());
         holder.view.setOnClickListener(v -> {
             if (null != mListener) {
                 mListener.onListFragmentInteraction(holder.job);

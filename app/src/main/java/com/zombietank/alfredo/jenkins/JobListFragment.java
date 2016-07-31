@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zombietank.alfredo.R;
+import com.zombietank.alfredo.jenkins.domain.Job;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,8 +42,7 @@ public class JobListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_joblist, container, false);
 
         if (view instanceof RecyclerView) {
@@ -54,7 +54,7 @@ public class JobListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            List<Job> jobs = Arrays.asList(new Job("First Job", "Success"), new Job("Alfredo", "Great Success"));
+            List<Job> jobs = Arrays.asList(new Job(), new Job());
             recyclerView.setAdapter(new JobListRecyclerViewAdapter(jobs, mListener));
         }
         return view;
