@@ -1,6 +1,8 @@
 package com.zombietank.alfredo;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +51,16 @@ public class MainActivity extends AppCompatActivity implements JobListFragment.O
     @Override
     public void onListFragmentInteraction(Job job) {
         Log.i(MainActivity.class.getSimpleName(), "Clicked on: " + job);
+    }
+
+
+    @SuppressWarnings("deprecation")
+    public void setToolbarColor(@ColorRes int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            toolbar.setBackgroundColor(getResources().getColor(color, getTheme()));
+        } else {
+            toolbar.setBackgroundColor(getResources().getColor(color));
+        }
     }
 
     @Override

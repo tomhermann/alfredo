@@ -41,7 +41,7 @@ public class JobListRecyclerViewAdapter extends RecyclerView.Adapter<JobListRecy
         holder.job = job;
         holder.firstLine.setText(job.getName());
         holder.secondLine.setText(job.getDescription());
-        holder.icon.setImageResource(job.isPassing() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+        holder.icon.setImageResource(job.isPassing() ? R.drawable.blue_circle : R.drawable.red_circle);
         holder.view.setOnClickListener(v -> {
             if (null != mListener) {
                 mListener.onListFragmentInteraction(holder.job);

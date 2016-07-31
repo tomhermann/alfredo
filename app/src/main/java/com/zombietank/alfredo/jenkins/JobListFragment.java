@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zombietank.alfredo.AlfredoApplication;
+import com.zombietank.alfredo.MainActivity;
 import com.zombietank.alfredo.R;
 import com.zombietank.alfredo.jenkins.domain.job.Job;
 import com.zombietank.alfredo.jenkins.domain.server.Server;
@@ -19,6 +20,7 @@ import com.zombietank.alfredo.jenkins.domain.server.Server;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -76,6 +78,9 @@ public class JobListFragment extends Fragment {
                 .map(Server::getJobs)
                 .subscribe(jobs -> {
                     adapter.setJobs(jobs);
+                    boolean allBuildsPassing = Observable.from(jobs).all(Job::isPassing).toBlocking().first();
+                    ((MainActivity) getActivity()).setToolbarColor(allBuildsPassing ? R.color.passing : R.color.failing);
+
                     SwipeRefreshLayout swipeRefreshLayout = ButterKnife.findById(getActivity(), R.id.swipeRefreshLayout);
                     swipeRefreshLayout.setRefreshing(false);
                 });
@@ -85,6 +90,7 @@ public class JobListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         ((AlfredoApplication) getActivity().getApplication()).getJenkinsComponent().inject(this);
+        ButterKnife.bind(this, getActivity());
 
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
@@ -94,6 +100,7 @@ public class JobListFragment extends Fragment {
             throw new RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener");
         }
     }
+
 
     @Override
     public void onDetach() {

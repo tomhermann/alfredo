@@ -9,11 +9,10 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="6dip"
+        android:layout_width="96sp"
+        android:layout_height="96sp"
         android:contentDescription="@string/status_icon"
-        android:src="@android:drawable/btn_star_big_on" />
+        android:src="@drawable/blue_circle" />
 
     <LinearLayout
         android:layout_width="wrap_content"
