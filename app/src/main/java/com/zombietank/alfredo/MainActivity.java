@@ -1,7 +1,6 @@
 package com.zombietank.alfredo;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements JobListFragment.OnListFragmentInteractionListener {
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @Inject
@@ -41,11 +37,6 @@ public class MainActivity extends AppCompatActivity implements JobListFragment.O
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add(R.id.content, jobListFragment).commit();
         }
-
-        fab.setOnClickListener(view -> {
-            JobListFragment jobListFragment = (JobListFragment) getSupportFragmentManager().findFragmentById(R.id.content);
-            jobListFragment.loadJobs();
-        });
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.zombietank.alfredo.jenkins;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.zombietank.alfredo.jenkins.domain.server.Server;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -52,20 +54,18 @@ public class JobListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_joblist, container, false);
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_joblist, container, false);
+        swipeRefreshLayout.setOnRefreshListener(this::loadJobs);
+        RecyclerView list = ButterKnife.findById(swipeRefreshLayout, R.id.list);
         this.adapter = new JobListRecyclerViewAdapter(mListener);
-
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(adapter);
+        Context context = list.getContext();
+        if (mColumnCount <= 1) {
+            list.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            list.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        return view;
+        list.setAdapter(adapter);
+        return swipeRefreshLayout;
     }
 
     public Subscription loadJobs() {
@@ -76,6 +76,8 @@ public class JobListFragment extends Fragment {
                 .map(Server::getJobs)
                 .subscribe(jobs -> {
                     adapter.setJobs(jobs);
+                    SwipeRefreshLayout swipeRefreshLayout = ButterKnife.findById(getActivity(), R.id.swipeRefreshLayout);
+                    swipeRefreshLayout.setRefreshing(false);
                 });
     }
 
@@ -87,6 +89,7 @@ public class JobListFragment extends Fragment {
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
             this.adapter = new JobListRecyclerViewAdapter(mListener);
+            loadJobs();
         } else {
             throw new RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener");
         }
