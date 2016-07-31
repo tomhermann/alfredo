@@ -1,8 +1,8 @@
 package com.zombietank.alfredo;
 
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.ColorRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -11,29 +11,28 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.zombietank.alfredo.jenkins.Job;
+import com.zombietank.alfredo.jenkins.JenkinsService;
 import com.zombietank.alfredo.jenkins.JobListFragment;
+import com.zombietank.alfredo.jenkins.domain.job.Job;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements JobListFragment.OnListFragmentInteractionListener {
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @Inject
+    JenkinsService jenkinsService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        ((AlfredoApplication) getApplication()).getJenkinsComponent().inject(this);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
 
         if (savedInstanceState == null) {
             Fragment jobListFragment = JobListFragment.newInstance(1);
@@ -52,6 +51,16 @@ public class MainActivity extends AppCompatActivity implements JobListFragment.O
     @Override
     public void onListFragmentInteraction(Job job) {
         Log.i(MainActivity.class.getSimpleName(), "Clicked on: " + job);
+    }
+
+
+    @SuppressWarnings("deprecation")
+    public void setToolbarColor(@ColorRes int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            toolbar.setBackgroundColor(getResources().getColor(color, getTheme()));
+        } else {
+            toolbar.setBackgroundColor(getResources().getColor(color));
+        }
     }
 
     @Override
