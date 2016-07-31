@@ -12,15 +12,12 @@ import android.view.MenuItem;
 
 import com.zombietank.alfredo.jenkins.JenkinsService;
 import com.zombietank.alfredo.jenkins.JobListFragment;
-import com.zombietank.alfredo.jenkins.domain.Job;
+import com.zombietank.alfredo.jenkins.domain.job.Job;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements JobListFragment.OnListFragmentInteractionListener {
 
@@ -39,32 +36,16 @@ public class MainActivity extends AppCompatActivity implements JobListFragment.O
         ((AlfredoApplication) getApplication()).getJenkinsComponent().inject(this);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> jenkinsService
-                .loadJob("percolate")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Job>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(MainActivity.class.getSimpleName(), "Error loading job", e);
-                    }
-
-                    @Override
-                    public void onNext(Job job) {
-                        Log.i(MainActivity.class.getSimpleName(), "Got job: " + job);
-                    }
-                }));
-
         if (savedInstanceState == null) {
             Fragment jobListFragment = JobListFragment.newInstance(1);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add(R.id.content, jobListFragment).commit();
         }
+
+        fab.setOnClickListener(view -> {
+            JobListFragment jobListFragment = (JobListFragment) getSupportFragmentManager().findFragmentById(R.id.content);
+            jobListFragment.loadJobs();
+        });
     }
 
     @Override

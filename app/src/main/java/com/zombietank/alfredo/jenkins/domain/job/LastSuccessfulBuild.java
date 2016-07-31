@@ -1,5 +1,5 @@
 
-package com.zombietank.alfredo.jenkins.domain;
+package com.zombietank.alfredo.jenkins.domain.job;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

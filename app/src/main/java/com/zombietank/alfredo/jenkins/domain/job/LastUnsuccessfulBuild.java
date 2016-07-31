@@ -1,5 +1,5 @@
 
-package com.zombietank.alfredo.jenkins.domain;
+package com.zombietank.alfredo.jenkins.domain.job;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "number",
     "url"
 })
-public class LastCompletedBuild {
+public class LastUnsuccessfulBuild {
 
     @JsonProperty("_class")
     private String _class;

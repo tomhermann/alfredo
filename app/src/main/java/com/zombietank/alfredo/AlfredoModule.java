@@ -4,6 +4,7 @@ import com.zombietank.alfredo.jenkins.JenkinsService;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
@@ -54,7 +55,7 @@ public class AlfredoModule {
 
             // Install the all-trusting trust manager
             SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, new TrustManager[]{x509TrustManager}, new java.security.SecureRandom());
+            sslContext.init(null, new TrustManager[]{x509TrustManager}, new SecureRandom());
             // Create an ssl socket factory with our all-trusting manager
             SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
             OkHttpClient.Builder builder = new OkHttpClient.Builder();

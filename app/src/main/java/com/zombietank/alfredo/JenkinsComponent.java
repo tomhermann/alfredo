@@ -1,5 +1,7 @@
 package com.zombietank.alfredo;
 
+import com.zombietank.alfredo.jenkins.JobListFragment;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -9,4 +11,5 @@ import dagger.Component;
 public interface JenkinsComponent {
     void inject(MainActivity activity);
 
+    void inject(JobListFragment jobListFragment);
 }

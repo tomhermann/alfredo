@@ -10,18 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.zombietank.alfredo.AlfredoApplication;
 import com.zombietank.alfredo.R;
-import com.zombietank.alfredo.jenkins.domain.Job;
+import com.zombietank.alfredo.jenkins.domain.job.Job;
+import com.zombietank.alfredo.jenkins.domain.server.Server;
 
-import java.util.Arrays;
-import java.util.List;
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class JobListFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private JobListRecyclerViewAdapter adapter;
+    @Inject
+    JenkinsService jenkinsService;
 
     public JobListFragment() {
+
     }
 
     public static JobListFragment newInstance(int columnCount) {
@@ -44,6 +53,7 @@ public class JobListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_joblist, container, false);
+        this.adapter = new JobListRecyclerViewAdapter(mListener);
 
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -53,19 +63,30 @@ public class JobListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-
-            List<Job> jobs = Arrays.asList(new Job(), new Job());
-            recyclerView.setAdapter(new JobListRecyclerViewAdapter(jobs, mListener));
+            recyclerView.setAdapter(adapter);
         }
         return view;
     }
 
+    public Subscription loadJobs() {
+        return jenkinsService
+                .loadServerDetails()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(Server::getJobs)
+                .subscribe(jobs -> {
+                    adapter.setJobs(jobs);
+                });
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        ((AlfredoApplication) getActivity().getApplication()).getJenkinsComponent().inject(this);
+
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
+            this.adapter = new JobListRecyclerViewAdapter(mListener);
         } else {
             throw new RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener");
         }

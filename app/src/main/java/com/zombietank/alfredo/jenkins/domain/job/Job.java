@@ -1,5 +1,5 @@
 
-package com.zombietank.alfredo.jenkins.domain;
+package com.zombietank.alfredo.jenkins.domain.job;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -98,6 +98,10 @@ public class Job {
     private Scm scm;
     @JsonProperty("upstreamProjects")
     private List<Object> upstreamProjects = new ArrayList<Object>();
+
+    public boolean isPassing() {
+        return "blue".equals(getColor());
+    }
 
     /**
      * 
@@ -661,7 +665,7 @@ public class Job {
 
     @Override
     public String toString() {
-        return "Job{" +
+        return "Server{" +
                 "_class='" + _class + '\'' +
                 ", actions=" + actions +
                 ", description='" + description + '\'' +

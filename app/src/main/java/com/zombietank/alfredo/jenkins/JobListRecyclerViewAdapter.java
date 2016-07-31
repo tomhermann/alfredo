@@ -8,19 +8,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zombietank.alfredo.R;
-import com.zombietank.alfredo.jenkins.domain.Job;
+import com.zombietank.alfredo.jenkins.domain.job.Job;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class JobListRecyclerViewAdapter extends RecyclerView.Adapter<JobListRecyclerViewAdapter.ViewHolder> {
-    private final List<Job> values;
     private final JobListFragment.OnListFragmentInteractionListener mListener;
+    private List<Job> jobs = new ArrayList<>();
 
-    public JobListRecyclerViewAdapter(List<Job> items, JobListFragment.OnListFragmentInteractionListener listener) {
-        values = items;
+    public JobListRecyclerViewAdapter(JobListFragment.OnListFragmentInteractionListener listener) {
         mListener = listener;
     }
 
@@ -30,11 +30,18 @@ public class JobListRecyclerViewAdapter extends RecyclerView.Adapter<JobListRecy
         return new ViewHolder(view);
     }
 
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.job = values.get(position);
-        holder.firstLine.setText(holder.job.getName());
-        holder.secondLine.setText(holder.job.getDescription());
+        Job job = jobs.get(position);
+        holder.job = job;
+        holder.firstLine.setText(job.getName());
+        holder.secondLine.setText(job.getDescription());
+        holder.icon.setImageResource(job.isPassing() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
         holder.view.setOnClickListener(v -> {
             if (null != mListener) {
                 mListener.onListFragmentInteraction(holder.job);
@@ -44,7 +51,7 @@ public class JobListRecyclerViewAdapter extends RecyclerView.Adapter<JobListRecy
 
     @Override
     public int getItemCount() {
-        return values.size();
+        return jobs.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

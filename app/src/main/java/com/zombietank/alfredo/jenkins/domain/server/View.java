@@ -1,5 +1,5 @@
+package com.zombietank.alfredo.jenkins.domain.server;
 
-package com.zombietank.alfredo.jenkins.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,23 +8,21 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 @JsonPropertyOrder({
-    "_class",
-    "number",
-    "url"
+        "_class",
+        "name",
+        "url"
 })
-public class FirstBuild {
+public class View {
 
     @JsonProperty("_class")
     private String _class;
-    @JsonProperty("number")
-    private Integer number;
+    @JsonProperty("name")
+    private String name;
     @JsonProperty("url")
     private String url;
 
     /**
-     * 
-     * @return
-     *     The _class
+     * @return The _class
      */
     @JsonProperty("_class")
     public String getClass_() {
@@ -32,9 +30,7 @@ public class FirstBuild {
     }
 
     /**
-     * 
-     * @param _class
-     *     The _class
+     * @param _class The _class
      */
     @JsonProperty("_class")
     public void setClass_(String _class) {
@@ -42,29 +38,23 @@ public class FirstBuild {
     }
 
     /**
-     * 
-     * @return
-     *     The number
+     * @return The name
      */
-    @JsonProperty("number")
-    public Integer getNumber() {
-        return number;
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     /**
-     * 
-     * @param number
-     *     The number
+     * @param name The name
      */
-    @JsonProperty("number")
-    public void setNumber(Integer number) {
-        this.number = number;
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
-     * 
-     * @return
-     *     The url
+     * @return The url
      */
     @JsonProperty("url")
     public String getUrl() {
@@ -72,9 +62,7 @@ public class FirstBuild {
     }
 
     /**
-     * 
-     * @param url
-     *     The url
+     * @param url The url
      */
     @JsonProperty("url")
     public void setUrl(String url) {
